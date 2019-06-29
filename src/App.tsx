@@ -1,7 +1,8 @@
 import React from "react";
+import { BannerMaker } from "./containers";
 
 const App: React.FC = () => {
-  return <div className="App">썸네일 메이커</div>;
+  return <BannerMaker />;
 };
 
 export default App;
