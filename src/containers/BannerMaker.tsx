@@ -1,53 +1,77 @@
 import React, { Component } from "react";
 import { ChromePicker } from "react-color";
-import { relative } from "path";
 
-interface IProps {}
 interface IState {
   [key: string]: any;
-  bgColor: object;
+  imgTarget: object;
+  bgColor: { r: number; g: number; b: number; a: number };
   bgImg: string;
-  fontColor: object;
+  fontColor: { r: number; g: number; b: number; a: number };
   text: string;
-  fontBgColor: object;
+  fontBgColor: { r: number; g: number; b: number; a: number };
   positionX: number;
   positionY: number;
+  href: string;
 }
 export class BannerMaker extends Component<{}, IState> {
   private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
 
+  constructor(props) {
+    super(props);
+    this.state.positionX = this.state.width / 2;
+    this.state.positionY = this.state.height / 2;
+  }
+
   state: IState = {
-    width: 300,
-    height: 300,
-    bgColor: { r: 0, g: 0, b: 0, a: 1 },
+    width: 560,
+    height: 315,
+    imgTarget: {},
+    bgColor: { r: 204, g: 0, b: 0, a: 1 },
     bgImg: "",
-    fontColor: { r: 0, g: 0, b: 0, a: 1 },
-    text: "",
+    fontColor: { r: 255, g: 255, b: 255, a: 1 },
+    text: "Sample Text",
     fontBgColor: { r: 0, g: 0, b: 0, a: 0 },
     positionX: 0,
-    positionY: 0
+    positionY: 0,
+    href: ""
   };
 
   componentDidMount() {
-    const canvas = this.canvasRef.current;
-    if (!!canvas) {
-      const ctx = canvas.getContext("2d");
-      if (!!ctx) {
-        canvas.width = this.state.width;
-        canvas.height = this.state.height;
-      }
-    }
+    this.renderCanvas();
   }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    this.renderCanvas();
+    return true;
+  }
+
+  renderCanvas = () => {
+    const canvas = this.canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    canvas.width = this.state.width;
+    canvas.height = this.state.height;
+    if (Object.keys(this.state.imgTarget).length === 0) {
+      const { r, g, b, a } = this.state.bgColor;
+      ctx.fillStyle = `rgba(${[r, g, b, a]})`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+      this.randerBgImg({ target: this.state.imgTarget });
+    }
+    if (!!this.state.text) {
+      const { r, g, b, a } = this.state.fontColor;
+      ctx.font = "30px Georgia";
+      ctx.fillStyle = `rgba(${[r, g, b, a]})`;
+      ctx.textAlign = "center"; // 가로 가운데 정렬
+      ctx.textBaseline = "middle";
+      ctx.fillText(this.state.text, this.state.positionX, this.state.positionY);
+    }
+  };
 
   /**
    * 글씨 설정
    * @param target : event target
    */
   setText = ({ target }) => {
-    const canvas = this.canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.font = "10px Georgia";
-    ctx.fillText(this.state.text, 0, 10);
     this.setState({
       text: target.value
     });
@@ -88,7 +112,11 @@ export class BannerMaker extends Component<{}, IState> {
    * @param target : event target
    */
   randerBgImg = ({ target }) => {
+    this.setState({
+      imgTarget: target
+    });
     const reader = new FileReader();
+    if (!reader) return false;
     reader.onload = () => {
       const img = new Image();
       const canvas = this.canvasRef.current;
@@ -115,7 +143,7 @@ export class BannerMaker extends Component<{}, IState> {
    */
   changeSize = ({ target }) => {
     this.setState({
-      [target.name]: Number(target.value)
+      [target.name]: +target.value
     });
   };
 
@@ -140,41 +168,26 @@ export class BannerMaker extends Component<{}, IState> {
    * @param target : event target
    */
   onDownLoad = ({ target }) => {
-    this.setState({
-      [target.name]: Number(target.value)
-    });
+    const href = this.canvasRef.current.toDataURL();
+    target.href = href;
+    target.download = "banner_img.png";
   };
 
   //글씨 넣기
 
   getPosition = e => {
-    const canvas = this.canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
     const rect = e.target.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    console.log(x, y);
-    this.setState(
-      {
-        positionX: x,
-        positionY: y
-      },
-      () => {
-        // console.log(2, this.state.positionX, this.state.positionY);
-        ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
-        ctx.fillRect(this.state.positionX, this.state.positionY, 50, 50);
-      }
-    );
-  };
-  move = e => {
-    const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    console.log(x, y);
+    // console.log(x, y);
+    this.setState({
+      positionX: x,
+      positionY: y
+    });
   };
 
   render() {
+    console.log(1);
     return (
       <React.Fragment>
         <div className="sizeControl">
@@ -185,7 +198,7 @@ export class BannerMaker extends Component<{}, IState> {
           <input type="number" name="height" onChange={this.changeSize} />
         </div>
         <p>결과물</p>
-        <div className="result" onMouseMove={this.move}>
+        <div className="result">
           <canvas ref={this.canvasRef} width={100} height={100} onClick={this.getPosition} />
           <span className="tooltop">a</span>
         </div>
@@ -194,11 +207,14 @@ export class BannerMaker extends Component<{}, IState> {
         <p>배경색 지정</p>
         <ChromePicker color={this.state.bgColor} onChangeComplete={this.changeBgColor} />
         <p>글씨 등록</p>
-        <input type="text" onChange={this.setText} />
+        <textarea onChange={this.setText} />
         <p>글씨색 지정</p>
         <ChromePicker color={this.state.fontColor} onChangeComplete={this.changeFontColor} />
         <p>배경색 지정</p>
         <ChromePicker color={this.state.fontBgColor} onChangeComplete={this.changeFontBgColor} />
+        <div className="downLoadBtn">
+          <a onClick={this.onDownLoad}>다운로드</a>
+        </div>
       </React.Fragment>
     );
   }
