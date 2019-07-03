@@ -61,8 +61,8 @@ export class BannerMaker extends Component<{}, IState> {
       const { r, g, b, a } = this.state.fontColor;
       ctx.font = "30px Georgia";
       ctx.fillStyle = `rgba(${[r, g, b, a]})`;
-      ctx.textAlign = "center"; // 가로 가운데 정렬
-      ctx.textBaseline = "middle";
+      ctx.textAlign = "left"; // 가로 가운데 정렬
+      ctx.textBaseline = "top";
       ctx.fillText(this.state.text, this.state.positionX, this.state.positionY);
     }
   };
