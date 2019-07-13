@@ -1,6 +1,7 @@
-// @import "./utils.scss";
+@import "reset";
 #root {
-  display: flex;
+  background: #2a2b40;
+  color: #ffffff;
   .box {
     background: red; // 일반 CSS 에선 .SassComponent .box 와 마찬가지
     cursor: pointer;
