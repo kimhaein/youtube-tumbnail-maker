@@ -13,6 +13,10 @@ interface IState {
   positionY: number;
   href: string;
 }
+
+interface IEventTarget {
+  target: HTMLInputElement & EventTarget;
+}
 export class BannerMaker extends Component<{}, IState> {
   private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
 
@@ -38,11 +42,18 @@ export class BannerMaker extends Component<{}, IState> {
 
   componentDidMount() {
     this.renderCanvas();
+    this.renderText();
   }
-
-  shouldComponentUpdate(nextProps, nextState) {
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (nextState.imgTarget === this.state.imgTarget) {
+  //     return false;
+  //   } else {
+  //     this.renderCanvas();
+  //     return true;
+  //   }
+  // }
+  componentDidUpdate() {
     this.renderCanvas();
-    return true;
   }
 
   renderCanvas = () => {
@@ -50,21 +61,15 @@ export class BannerMaker extends Component<{}, IState> {
     const ctx = canvas.getContext("2d");
     canvas.width = this.state.width;
     canvas.height = this.state.height;
+
     if (Object.keys(this.state.imgTarget).length === 0) {
       const { r, g, b, a } = this.state.bgColor;
       ctx.fillStyle = `rgba(${[r, g, b, a]})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     } else {
-      this.randerBgImg({ target: this.state.imgTarget });
+      this.randerBgImg(this.state.imgTarget);
     }
-    if (!!this.state.text) {
-      const { r, g, b, a } = this.state.fontColor;
-      ctx.font = "30px Georgia";
-      ctx.fillStyle = `rgba(${[r, g, b, a]})`;
-      ctx.textAlign = "left"; // 가로 가운데 정렬
-      ctx.textBaseline = "top";
-      ctx.fillText(this.state.text, this.state.positionX, this.state.positionY);
-    }
+    this.renderText();
   };
 
   /**
@@ -72,9 +77,27 @@ export class BannerMaker extends Component<{}, IState> {
    * @param target : event target
    */
   setText = ({ target }) => {
-    this.setState({
-      text: target.value
-    });
+    this.setState(
+      {
+        text: target.value
+      },
+      this.renderText
+    );
+  };
+
+  /**
+   * 글씨 설정
+   * @param target : event target
+   */
+  renderText = () => {
+    const canvas = this.canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    const { r, g, b, a } = this.state.fontColor;
+    ctx.font = "30px Georgia";
+    ctx.fillStyle = `rgba(${[r, g, b, a]})`;
+    ctx.textAlign = "left"; // 가로 가운데 정렬
+    ctx.textBaseline = "top";
+    ctx.fillText(this.state.text, this.state.positionX, this.state.positionY);
   };
 
   /**
@@ -111,21 +134,30 @@ export class BannerMaker extends Component<{}, IState> {
    * 배너 배경이미지 설정
    * @param target : event target
    */
-  randerBgImg = ({ target }) => {
+  setBgImg = (event?: IEventTarget) => {
     this.setState({
-      imgTarget: target
+      imgTarget: event.target
     });
+    this.randerBgImg(event.target);
+  };
+
+  /**
+   * 배너 배경이미지 설정
+   * @param target : event target
+   */
+  randerBgImg = target => {
     const reader = new FileReader();
+    const img = new Image();
+    const canvas = this.canvasRef.current;
     if (!reader) return false;
     reader.onload = () => {
-      const img = new Image();
-      const canvas = this.canvasRef.current;
       const ctx = canvas.getContext("2d");
-
       img.onload = () => {
         canvas.width = this.state.width;
         canvas.height = this.state.height;
-        ctx.drawImage(img, 0, 0);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        // 글씨 랜더
+        this.renderText();
       };
 
       if (typeof reader.result === "string") {
@@ -187,7 +219,6 @@ export class BannerMaker extends Component<{}, IState> {
   };
 
   render() {
-    console.log(1);
     return (
       <React.Fragment>
         <div className="sizeControl">
@@ -203,7 +234,7 @@ export class BannerMaker extends Component<{}, IState> {
           <span className="tooltop">a</span>
         </div>
         <p>배경색 이미지 등록</p>
-        <input type="file" onChange={this.randerBgImg} />
+        <input type="file" onChange={this.setBgImg} />
         <p>배경색 지정</p>
         <ChromePicker color={this.state.bgColor} onChangeComplete={this.changeBgColor} />
         <p>글씨 등록</p>
