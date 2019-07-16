@@ -221,27 +221,34 @@ export class BannerMaker extends Component<{}, IState> {
   render() {
     return (
       <React.Fragment>
-        <div className="sizeControl">
-          <p>사이즈 지정</p>
-          <label>넓이</label>
-          <input type="number" name="width" onChange={this.changeSize} />
-          <label>높이</label>
-          <input type="number" name="height" onChange={this.changeSize} />
+        <div className="header">
+          <h1>Maker</h1>
         </div>
-        <p>결과물</p>
+        <div className="sizeControl">
+          <h2>사이즈 지정</h2>
+          <div className="inputWrap">
+            <label>width : </label>
+            <input type="number" name="width" onChange={this.changeSize} />
+          </div>
+          <div className="inputWrap">
+            <label>height : </label>
+            <input type="number" name="height" onChange={this.changeSize} />
+          </div>
+        </div>
+        <h2>결과물</h2>
         <div className="result">
           <canvas ref={this.canvasRef} width={100} height={100} onClick={this.getPosition} />
           <span className="tooltop">a</span>
         </div>
-        <p>배경색 이미지 등록</p>
+        <h2>배경색 이미지 등록</h2>
         <input type="file" onChange={this.setBgImg} />
-        <p>배경색 지정</p>
+        <h2>배경색 지정</h2>
         <ChromePicker color={this.state.bgColor} onChangeComplete={this.changeBgColor} />
-        <p>글씨 등록</p>
+        <h2>글씨 등록</h2>
         <textarea onChange={this.setText} />
-        <p>글씨색 지정</p>
+        <h2>글씨색 지정</h2>
         <ChromePicker color={this.state.fontColor} onChangeComplete={this.changeFontColor} />
-        <p>배경색 지정</p>
+        <h2>배경색 지정</h2>
         <ChromePicker color={this.state.fontBgColor} onChangeComplete={this.changeFontBgColor} />
         <div className="downLoadBtn">
           <a onClick={this.onDownLoad}>다운로드</a>

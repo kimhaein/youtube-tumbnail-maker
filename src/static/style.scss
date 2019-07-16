@@ -1,7 +1,19 @@
 @import "reset";
-#root {
+body {
   background: #2a2b40;
+}
+
+#root {
   color: #ffffff;
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    background-color: #ffffff;
+    font-size: 18px;
+    color: #2a2b40;
+  }
   .box {
     background: red; // 일반 CSS 에선 .SassComponent .box 와 마찬가지
     cursor: pointer;
@@ -39,5 +51,22 @@
       // .box 에 마우스 올렸을 때
       background: black;
     }
+  }
+}
+
+.inputWrap {
+  label {
+    display: block;
+    float: left;
+    height: 30px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+  }
+  input {
+    width: 150px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 0 10px 10px 0;
   }
 }
