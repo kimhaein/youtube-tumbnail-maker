@@ -1,5 +1,9 @@
 import React, { Component } from "react";
+import { Dispatch } from "redux";
+import { connect } from "react-redux";
+import { IStoreState } from "../store";
 import { ChromePicker } from "react-color";
+import { setWidth } from "../actions";
 
 interface IState {
   [key: string]: any;
@@ -17,7 +21,22 @@ interface IState {
 interface IEventTarget {
   target: HTMLInputElement & EventTarget;
 }
-export class BannerMaker extends Component<{}, IState> {
+interface IProps {
+  [key: string]: any;
+}
+
+const mapStateToProps = (state: IStoreState) => {
+  // store 의 state 를 컴포넌트의 props 에 매핑
+  return {
+    width: state.width
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  // 컴포넌트의 특정 함수형 props 를 실행 했을 때, 개발자가 지정한 action을 dispatch 하도록 설정
+  setWidth: width => dispatch(setWidth(width))
+});
+export class BannerMaker extends Component<IProps, IState> {
   private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
 
   constructor(props) {
@@ -219,6 +238,7 @@ export class BannerMaker extends Component<{}, IState> {
   };
 
   render() {
+    console.log(this.props);
     return (
       <React.Fragment>
         <div className="header">
@@ -268,3 +288,8 @@ export class BannerMaker extends Component<{}, IState> {
     );
   }
 }
+
+export const BannerMakerContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BannerMaker);

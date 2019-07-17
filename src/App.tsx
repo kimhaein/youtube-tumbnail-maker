@@ -1,8 +1,8 @@
 import React from "react";
-import { BannerMaker } from "./containers";
+import { BannerMakerContainer } from "./containers";
 
 const App: React.FC = () => {
-  return <BannerMaker />;
+  return <BannerMakerContainer />;
 };
 
 export default App;
