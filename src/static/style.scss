@@ -1,6 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700|Rajdhani:400,700");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400, 700, 900");
 @import "reset";
+
 body {
-  background: #2a2b40;
+  font-family: "Noto Sans KR", sans-serif;
+  background: $mainColor;
+  font-size: 14px;
+}
+
+h2 {
+  display: block;
 }
 
 #root {
@@ -14,6 +23,19 @@ body {
     font-size: 18px;
     color: #2a2b40;
   }
+  .mainWrap > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+  }
+  .sizeControl {
+    overflow: hidden;
+  }
+
+  .bgImg {
+  }
+
   .box {
     background: red; // 일반 CSS 에선 .SassComponent .box 와 마찬가지
     cursor: pointer;
@@ -55,18 +77,29 @@ body {
 }
 
 .inputWrap {
+  float: left;
+  margin: 0 5px;
   label {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     float: left;
     height: 30px;
-    border: 1px solid #ddd;
+    padding: 0 15px;
+    box-sizing: border-box;
+    border: 1px solid $line;
+    border-radius: 5px 0 0 5px;
     background-color: #fff;
+    color: $mainColor;
   }
   input {
-    width: 150px;
+    min-width: 150px;
     height: 30px;
-    padding: 0;
-    border: 1px solid #ddd;
-    border-radius: 0 10px 10px 0;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border: 1px solid $line;
+    border-radius: 0 5px 5px 0;
+    background-color: #fff;
+    color: $mainColor;
   }
 }

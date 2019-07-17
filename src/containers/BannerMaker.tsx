@@ -224,34 +224,45 @@ export class BannerMaker extends Component<{}, IState> {
         <div className="header">
           <h1>Maker</h1>
         </div>
-        <div className="sizeControl">
-          <h2>사이즈 지정</h2>
-          <div className="inputWrap">
-            <label>width : </label>
-            <input type="number" name="width" onChange={this.changeSize} />
+        <div className="mainWrap">
+          <div className="perview">
+            <canvas ref={this.canvasRef} width={100} height={100} onClick={this.getPosition} />
           </div>
-          <div className="inputWrap">
-            <label>height : </label>
-            <input type="number" name="height" onChange={this.changeSize} />
+          <div className="sizeControl">
+            <div className="inputWrap">
+              <label>width</label>
+              <input type="number" name="width" onChange={this.changeSize} />
+            </div>
+            <div className="inputWrap">
+              <label>height</label>
+              <input type="number" name="height" onChange={this.changeSize} />
+            </div>
           </div>
-        </div>
-        <h2>결과물</h2>
-        <div className="result">
-          <canvas ref={this.canvasRef} width={100} height={100} onClick={this.getPosition} />
-          <span className="tooltop">a</span>
-        </div>
-        <h2>배경색 이미지 등록</h2>
-        <input type="file" onChange={this.setBgImg} />
-        <h2>배경색 지정</h2>
-        <ChromePicker color={this.state.bgColor} onChangeComplete={this.changeBgColor} />
-        <h2>글씨 등록</h2>
-        <textarea onChange={this.setText} />
-        <h2>글씨색 지정</h2>
-        <ChromePicker color={this.state.fontColor} onChangeComplete={this.changeFontColor} />
-        <h2>배경색 지정</h2>
-        <ChromePicker color={this.state.fontBgColor} onChangeComplete={this.changeFontBgColor} />
-        <div className="downLoadBtn">
-          <a onClick={this.onDownLoad}>다운로드</a>
+          <div className="bgImg">
+            <div className="inputWrap">
+              <label>배경 이미지 등록</label>
+              <input type="file" onChange={this.setBgImg} />
+            </div>
+          </div>
+          <div className="bgColor">
+            <h2>배경색 지정</h2>
+            <ChromePicker color={this.state.bgColor} onChangeComplete={this.changeBgColor} />
+          </div>
+          <div className="textContents">
+            <h2>글씨 등록</h2>
+            <textarea onChange={this.setText} />
+          </div>
+          <div className="textColor">
+            <h2>글씨색 지정</h2>
+            <ChromePicker color={this.state.fontColor} onChangeComplete={this.changeFontColor} />
+          </div>
+          <div className="textBgColor">
+            <h2>배경색 지정</h2>
+            <ChromePicker color={this.state.fontBgColor} onChangeComplete={this.changeFontBgColor} />
+          </div>
+          <div className="downLoadBtn">
+            <a onClick={this.onDownLoad}>다운로드</a>
+          </div>
         </div>
       </React.Fragment>
     );
