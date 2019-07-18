@@ -4,30 +4,50 @@ import * as Actions from "../actions";
 
 // store 초기 값 세팅
 export const initializeState: IStoreState = {
-  width: 560,
-  height: 315,
+  width: "1060",
+  height: "600",
   imgTarget: {},
   bgColor: { r: 204, g: 0, b: 0, a: 1 },
-  bgImg: "",
   fontColor: { r: 255, g: 255, b: 255, a: 1 },
   text: "Sample Text",
   fontBgColor: { r: 0, g: 0, b: 0, a: 0 },
-  positionX: 0,
-  positionY: 0,
+  positionX: 280,
+  positionY: 108,
   href: ""
 };
 
 export default (state: IStoreState = initializeState, action: ActionType<typeof Actions>) => {
   switch (action.type) {
-    case getType(Actions.setWidth):
+    case getType(Actions.updateWidth):
       return {
         ...state,
         width: action.payload.width
       };
-    case getType(Actions.setHeight):
+    case getType(Actions.updateHeight):
       return {
         ...state,
-        height: state.height
+        height: action.payload.height
+      };
+    case getType(Actions.updateBgColor):
+      return {
+        ...state,
+        bgColor: action.payload.bgColor
+      };
+    case getType(Actions.updatePostion):
+      return {
+        ...state,
+        positionX: action.payload.positionX,
+        positionY: action.payload.positionY
+      };
+    case getType(Actions.updateText):
+      return {
+        ...state,
+        text: action.payload.text
+      };
+    case getType(Actions.updateFontColor):
+      return {
+        ...state,
+        fontColor: action.payload.fontColor
       };
     default:
       return Object.assign({}, state);

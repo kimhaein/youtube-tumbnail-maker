@@ -1,10 +1,11 @@
-export type FinishStatus = "success" | "error";
-
+export interface IEventTarget {
+  target: HTMLInputElement & EventTarget;
+}
 export interface IStoreState {
-  [key: string]: any;
+  width: string;
+  height: string;
   imgTarget: object;
   bgColor: { r: number; g: number; b: number; a: number };
-  bgImg: string;
   fontColor: { r: number; g: number; b: number; a: number };
   text: string;
   fontBgColor: { r: number; g: number; b: number; a: number };

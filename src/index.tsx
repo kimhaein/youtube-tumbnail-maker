@@ -11,8 +11,7 @@ import "./static/style.scss";
 const store = createStore(
   reducer, // action to handle
   initializeState,
-  composeWithDevTools()
-  // composeWithDevTools : DevTools 미들웨어
+  composeWithDevTools() // composeWithDevTools : DevTools 미들웨어
 );
 
 const rootElement: HTMLElement = document.getElementById("root");

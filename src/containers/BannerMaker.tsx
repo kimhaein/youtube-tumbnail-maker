@@ -2,75 +2,66 @@ import React, { Component } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { IStoreState } from "../store";
-import { ChromePicker } from "react-color";
-import { setWidth } from "../actions";
+import { updateWidth, updatePostion, updateBgColor, updateHeight, updateText, updateFontColor } from "../actions";
 
-interface IState {
-  [key: string]: any;
+import { Preview, SizeControler, BgColorControler, TextControler, FontColorControler, BgImgControler, DownloadBtn } from "../componets";
+
+interface IProps {
+  width: string;
+  height: string;
   imgTarget: object;
   bgColor: { r: number; g: number; b: number; a: number };
-  bgImg: string;
   fontColor: { r: number; g: number; b: number; a: number };
   text: string;
   fontBgColor: { r: number; g: number; b: number; a: number };
   positionX: number;
   positionY: number;
   href: string;
-}
-
-interface IEventTarget {
-  target: HTMLInputElement & EventTarget;
-}
-interface IProps {
-  [key: string]: any;
+  updateWidth?(width: string): void;
+  updateHeight?(height: string): void;
+  updateBgColor?(bgColor: object): void;
+  updatePostion?(positionX: number, positionY: number): void;
+  updateText?(text: string): void;
+  updateFontColor?(fontColor: object): void;
 }
 
 const mapStateToProps = (state: IStoreState) => {
   // store 의 state 를 컴포넌트의 props 에 매핑
   return {
-    width: state.width
+    width: state.width,
+    height: state.height,
+    imgTarget: state.imgTarget,
+    bgColor: state.bgColor,
+    fontColor: state.fontColor,
+    text: state.text,
+    fontBgColor: state.fontBgColor,
+    positionX: state.positionX,
+    positionY: state.positionY,
+    href: state.href
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   // 컴포넌트의 특정 함수형 props 를 실행 했을 때, 개발자가 지정한 action을 dispatch 하도록 설정
-  setWidth: width => dispatch(setWidth(width))
+  updateWidth: width => dispatch(updateWidth(width)),
+  updateHeight: height => dispatch(updateHeight(height)),
+  updateBgColor: bgColor => dispatch(updateBgColor(bgColor)),
+  updatePostion: (positionX, positionY) => dispatch(updatePostion(positionX, positionY)),
+  updateText: text => dispatch(updateText(text)),
+  updateFontColor: fontColor => dispatch(updateFontColor(fontColor))
 });
-export class BannerMaker extends Component<IProps, IState> {
+export class BannerMaker extends Component<IProps, {}> {
   private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
 
-  constructor(props) {
-    super(props);
-    this.state.positionX = this.state.width / 2;
-    this.state.positionY = this.state.height / 2;
+  shouldComponentUpdate(nextProps, nextState) {
+    // if (this.state.href === nextState.href) return false;
+    return true;
   }
-
-  state: IState = {
-    width: 560,
-    height: 315,
-    imgTarget: {},
-    bgColor: { r: 204, g: 0, b: 0, a: 1 },
-    bgImg: "",
-    fontColor: { r: 255, g: 255, b: 255, a: 1 },
-    text: "Sample Text",
-    fontBgColor: { r: 0, g: 0, b: 0, a: 0 },
-    positionX: 0,
-    positionY: 0,
-    href: ""
-  };
 
   componentDidMount() {
     this.renderCanvas();
-    this.renderText();
   }
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (nextState.imgTarget === this.state.imgTarget) {
-  //     return false;
-  //   } else {
-  //     this.renderCanvas();
-  //     return true;
-  //   }
-  // }
+
   componentDidUpdate() {
     this.renderCanvas();
   }
@@ -78,92 +69,52 @@ export class BannerMaker extends Component<IProps, IState> {
   renderCanvas = () => {
     const canvas = this.canvasRef.current;
     const ctx = canvas.getContext("2d");
-    canvas.width = this.state.width;
-    canvas.height = this.state.height;
+    canvas.width = +this.props.width;
+    canvas.height = +this.props.height;
 
-    if (Object.keys(this.state.imgTarget).length === 0) {
-      const { r, g, b, a } = this.state.bgColor;
+    if (Object.keys(this.props.imgTarget).length === 0) {
+      const { r, g, b, a } = this.props.bgColor;
       ctx.fillStyle = `rgba(${[r, g, b, a]})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     } else {
-      this.randerBgImg(this.state.imgTarget);
+      this.randerBgImg(this.props.imgTarget);
     }
     this.renderText();
   };
 
-  /**
-   * 글씨 설정
-   * @param target : event target
-   */
-  setText = ({ target }) => {
-    this.setState(
-      {
-        text: target.value
-      },
-      this.renderText
-    );
+  // test 업데이트
+  setText = event => {
+    this.props.updateText(event.target.value);
   };
 
-  /**
-   * 글씨 설정
-   * @param target : event target
-   */
+  // test 적용
   renderText = () => {
     const canvas = this.canvasRef.current;
     const ctx = canvas.getContext("2d");
-    const { r, g, b, a } = this.state.fontColor;
+    const { r, g, b, a } = this.props.fontColor;
     ctx.font = "30px Georgia";
     ctx.fillStyle = `rgba(${[r, g, b, a]})`;
     ctx.textAlign = "left"; // 가로 가운데 정렬
     ctx.textBaseline = "top";
-    ctx.fillText(this.state.text, this.state.positionX, this.state.positionY);
+    ctx.fillText(this.props.text, this.props.positionX, this.props.positionY);
   };
 
-  /**
-   * 배너 배경색 변경
-   * @param rgb : color rgbcode
-   */
+  // 배경색 업데이트
   changeBgColor = ({ rgb }) => {
-    this.setState({
-      bgColor: rgb
-    });
+    this.props.updateBgColor(rgb);
   };
 
-  /**
-   * 글씨색 변경
-   * @param rgb : color rgbcode
-   */
+  // 글씨색 업데이트
   changeFontColor = ({ rgb }) => {
-    this.setState({
-      fontColor: rgb
-    });
+    this.props.updateFontColor(rgb);
   };
 
-  /**
-   * 글씨 배경색 변경
-   * @param rgb : color rgbcode
-   */
-  changeFontBgColor = ({ rgb }) => {
-    this.setState({
-      fontBgColor: rgb
-    });
-  };
-
-  /**
-   * 배너 배경이미지 설정
-   * @param target : event target
-   */
-  setBgImg = (event?: IEventTarget) => {
-    this.setState({
-      imgTarget: event.target
-    });
+  // 배경 이미지 업데이트
+  setBgImg = event => {
     this.randerBgImg(event.target);
   };
 
-  /**
-   * 배너 배경이미지 설정
-   * @param target : event target
-   */
+  // 배경 이미지 적용
   randerBgImg = target => {
     const reader = new FileReader();
     const img = new Image();
@@ -172,8 +123,8 @@ export class BannerMaker extends Component<IProps, IState> {
     reader.onload = () => {
       const ctx = canvas.getContext("2d");
       img.onload = () => {
-        canvas.width = this.state.width;
-        canvas.height = this.state.height;
+        canvas.width = +this.props.width;
+        canvas.height = +this.props.height;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         // 글씨 랜더
         this.renderText();
@@ -188,101 +139,58 @@ export class BannerMaker extends Component<IProps, IState> {
     reader.readAsDataURL(target.files[0]);
   };
 
-  /**
-   * 배너 크기 설정
-   * @param target : event target
-   */
+  // 사이즈 적용
   changeSize = ({ target }) => {
-    this.setState({
-      [target.name]: +target.value
-    });
+    switch (target.name) {
+      case "width":
+        this.props.updateWidth(target.value);
+        break;
+      case "height":
+        this.props.updateHeight(target.value);
+        break;
+      default:
+        this.props.updateWidth(this.props.width);
+        this.props.updateHeight(this.props.height);
+        break;
+    }
   };
 
-  /**
-   * 스티커 설정
-   * @param target : event target
-   */
-  setSticker = ({ target }) => {
-    // const img = new Image();
-    // const canvas = this.canvasRef.current;
-    // const ctx = canvas.getContext("2d");
-    // img.onload = () => {
-    //   canvas.width = this.state.width;
-    //   canvas.height = this.state.height;
-    //   ctx.drawImage(img, 0, 0);
-    // };
-    // img.src = target.result;
-  };
+  // 스티커 설정
+  setSticker = ({ target }) => {};
 
-  /**
-   * 이미지 다운로드
-   * @param target : event target
-   */
+  // 이미지 다운로드
   onDownLoad = ({ target }) => {
     const href = this.canvasRef.current.toDataURL();
     target.href = href;
     target.download = "banner_img.png";
   };
 
-  //글씨 넣기
-
+  // 위치값 업데이트
   getPosition = e => {
     const rect = e.target.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    // console.log(x, y);
-    this.setState({
-      positionX: x,
-      positionY: y
-    });
+    this.props.updatePostion(x, y);
   };
 
   render() {
-    console.log(this.props);
     return (
       <React.Fragment>
         <div className="header">
-          <h1>Maker</h1>
+          <h1>Banner Maker</h1>
         </div>
         <div className="mainWrap">
-          <div className="perview">
-            <canvas ref={this.canvasRef} width={100} height={100} onClick={this.getPosition} />
-          </div>
-          <div className="sizeControl">
-            <div className="inputWrap">
-              <label>width</label>
-              <input type="number" name="width" onChange={this.changeSize} />
-            </div>
-            <div className="inputWrap">
-              <label>height</label>
-              <input type="number" name="height" onChange={this.changeSize} />
-            </div>
-          </div>
-          <div className="bgImg">
-            <div className="inputWrap">
-              <label>배경 이미지 등록</label>
-              <input type="file" onChange={this.setBgImg} />
-            </div>
-          </div>
-          <div className="bgColor">
-            <h2>배경색 지정</h2>
-            <ChromePicker color={this.state.bgColor} onChangeComplete={this.changeBgColor} />
-          </div>
-          <div className="textContents">
-            <h2>글씨 등록</h2>
-            <textarea onChange={this.setText} />
-          </div>
-          <div className="textColor">
-            <h2>글씨색 지정</h2>
-            <ChromePicker color={this.state.fontColor} onChangeComplete={this.changeFontColor} />
-          </div>
-          <div className="textBgColor">
-            <h2>배경색 지정</h2>
-            <ChromePicker color={this.state.fontBgColor} onChangeComplete={this.changeFontBgColor} />
-          </div>
-          <div className="downLoadBtn">
-            <a onClick={this.onDownLoad}>다운로드</a>
-          </div>
+          <Preview canvasRef={this.canvasRef} getPosition={this.getPosition} />
+          <SizeControler width={this.props.width} height={this.props.height} changeSize={this.changeSize} />
+          <BgImgControler setBgImg={this.setBgImg} />
+          <BgColorControler
+            bgColor={this.props.bgColor}
+            fontColor={this.props.fontColor}
+            changeBgColor={this.changeBgColor}
+            changeFontColor={this.changeFontColor}
+          />
+          <TextControler setText={this.setText} />
+          <DownloadBtn onDownLoad={this.onDownLoad} />
         </div>
       </React.Fragment>
     );
