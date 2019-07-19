@@ -189,7 +189,7 @@ export class BannerMaker extends Component<IProps, {}> {
             changeBgColor={this.changeBgColor}
             changeFontColor={this.changeFontColor}
           />
-          <TextControler setText={this.setText} />
+          <TextControler text={this.props.text} setText={this.setText} />
           <DownloadBtn onDownLoad={this.onDownLoad} />
         </div>
       </React.Fragment>

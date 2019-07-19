@@ -4,15 +4,15 @@ import * as Actions from "../actions";
 
 // store 초기 값 세팅
 export const initializeState: IStoreState = {
-  width: "1060",
-  height: "600",
+  width: "700",
+  height: "350",
   imgTarget: {},
   bgColor: { r: 204, g: 0, b: 0, a: 1 },
   fontColor: { r: 255, g: 255, b: 255, a: 1 },
   text: "Sample Text",
   fontBgColor: { r: 0, g: 0, b: 0, a: 0 },
-  positionX: 280,
-  positionY: 108,
+  positionX: 350,
+  positionY: 175,
   href: ""
 };
 
