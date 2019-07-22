@@ -4,9 +4,12 @@ export interface IEventTarget {
 export interface IStoreState {
   width: string;
   height: string;
-  imgTarget: object;
+  imgTarget: {
+    files: object[];
+  };
   bgColor: { r: number; g: number; b: number; a: number };
   fontColor: { r: number; g: number; b: number; a: number };
+  textList: string[];
   text: string;
   fontBgColor: { r: number; g: number; b: number; a: number };
   positionX: number;

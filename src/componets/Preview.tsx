@@ -8,7 +8,7 @@ interface PreviewProps {
 export const Preview: React.FC<PreviewProps> = props => {
   return (
     <div className="perview">
-      <canvas ref={props.canvasRef} width={100} height={100} onClick={props.getPosition} />
+      <canvas ref={props.canvasRef} onClick={props.getPosition} />
     </div>
   );
 };

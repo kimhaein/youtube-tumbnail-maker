@@ -4,11 +4,14 @@ import * as Actions from "../actions";
 
 // store 초기 값 세팅
 export const initializeState: IStoreState = {
-  width: "700",
+  width: "720",
   height: "350",
-  imgTarget: {},
+  imgTarget: {
+    files: []
+  },
   bgColor: { r: 204, g: 0, b: 0, a: 1 },
   fontColor: { r: 255, g: 255, b: 255, a: 1 },
+  textList: [],
   text: "Sample Text",
   fontBgColor: { r: 0, g: 0, b: 0, a: 0 },
   positionX: 350,
@@ -32,6 +35,11 @@ export default (state: IStoreState = initializeState, action: ActionType<typeof 
       return {
         ...state,
         bgColor: action.payload.bgColor
+      };
+    case getType(Actions.updateimgTarget):
+      return {
+        ...state,
+        imgTarget: action.payload.imgTarget
       };
     case getType(Actions.updatePostion):
       return {

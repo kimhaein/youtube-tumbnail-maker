@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700|Rajdhani:400,700");
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400, 700, 900");
+@import url("https://fonts.googleapis.com/css?family=Black+Han+Sans&display=swap&subset=korean");
 @import "reset";
 
 body {
@@ -10,44 +10,53 @@ body {
 
 h2 {
   margin-bottom: 20px;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .inputWrap {
-  float: left;
-  margin: 0 5px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.3) 0px 4px 8px;
-  border-radius: 0 5px 5px 0;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.3) 0px 2px 8px;
+  border-radius: 5px;
+  background: #fff;
   > * {
     height: 40px;
     box-sizing: border-box;
-    border: 1px solid $line;
     background-color: #fff;
     font-size: 14px;
     color: $mainColor;
   }
   label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include center;
     float: left;
+    width: 100px;
     padding: 0 15px;
+    border-right: 1px solid $line;
     border-radius: 5px 0 0 5px;
     font-weight: bold;
   }
-  input {
-    min-width: 150px;
+  input,
+  select {
+    width: 140px;
     padding: 5px 10px;
+    border: none;
     border-radius: 0 5px 5px 0;
+  }
+}
+
+.row {
+  display: flex;
+  overflow: hidden;
+  // flex-direction: row;
+  justify-content: space-between;
+  > div {
+    // flex: 1;
+    justify-content: space-between;
   }
 }
 
 #root {
   color: #ffffff;
   .header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include center;
     height: 80px;
     margin-bottom: 50px;
     background-color: #ffffff;
@@ -55,25 +64,28 @@ h2 {
     color: #2a2b40;
   }
   .mainWrap > * {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include center;
     padding: 20px;
   }
   .SizeControler {
     overflow: hidden;
   }
 
-  .colorControler {
-    flex-direction: column;
+  .bgControler {
+    width: 560px;
     .bgColorWrap {
-      padding: 5px;
-      box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.3) 0px 4px 8px;
+      padding: 15px;
+      box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.3) 0px 2px 8px;
+      border: 1px solid #fff;
       border-radius: 5px;
-      background: #ffffff;
       > div {
-        box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.3) 0px 4px 8px;
+        float: none;
+        margin: 20px;
+      }
+      .colorControler > div {
         margin: 10px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 2px, rgba(0, 0, 0, 0.3) 0px 2px 8px;
+        background: #fff;
       }
     }
   }

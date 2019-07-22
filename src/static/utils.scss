@@ -14,3 +14,9 @@ $violet: #7950f2;
   width: $calculated;
   height: $calculated;
 }
+
+@mixin center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

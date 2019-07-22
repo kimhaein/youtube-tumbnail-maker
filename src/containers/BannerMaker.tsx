@@ -2,16 +2,19 @@ import React, { Component } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { IStoreState } from "../store";
-import { updateWidth, updatePostion, updateBgColor, updateHeight, updateText, updateFontColor } from "../actions";
+import { updateWidth, updatePostion, updateBgColor, updateimgTarget, updateHeight, updateText, updateFontColor } from "../actions";
 
-import { Preview, SizeControler, BgColorControler, TextControler, FontColorControler, BgImgControler, DownloadBtn } from "../componets";
+import { Preview, SizeControler, BgColorControler, FontColorControler, DownloadBtn } from "../componets";
 
 interface IProps {
   width: string;
   height: string;
-  imgTarget: object;
+  imgTarget: {
+    files: object[];
+  };
   bgColor: { r: number; g: number; b: number; a: number };
   fontColor: { r: number; g: number; b: number; a: number };
+  textList: string[];
   text: string;
   fontBgColor: { r: number; g: number; b: number; a: number };
   positionX: number;
@@ -20,6 +23,7 @@ interface IProps {
   updateWidth?(width: string): void;
   updateHeight?(height: string): void;
   updateBgColor?(bgColor: object): void;
+  updateimgTarget?(imgTarget: object): void;
   updatePostion?(positionX: number, positionY: number): void;
   updateText?(text: string): void;
   updateFontColor?(fontColor: object): void;
@@ -33,6 +37,7 @@ const mapStateToProps = (state: IStoreState) => {
     imgTarget: state.imgTarget,
     bgColor: state.bgColor,
     fontColor: state.fontColor,
+    textList: state.textList,
     text: state.text,
     fontBgColor: state.fontBgColor,
     positionX: state.positionX,
@@ -46,6 +51,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   updateWidth: width => dispatch(updateWidth(width)),
   updateHeight: height => dispatch(updateHeight(height)),
   updateBgColor: bgColor => dispatch(updateBgColor(bgColor)),
+  updateimgTarget: imgTarget => dispatch(updateimgTarget(imgTarget)),
   updatePostion: (positionX, positionY) => dispatch(updatePostion(positionX, positionY)),
   updateText: text => dispatch(updateText(text)),
   updateFontColor: fontColor => dispatch(updateFontColor(fontColor))
@@ -53,10 +59,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export class BannerMaker extends Component<IProps, {}> {
   private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // if (this.state.href === nextState.href) return false;
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   // if (this.state.href === nextState.href) return false;
+  //   return true;
+  // }
 
   componentDidMount() {
     this.renderCanvas();
@@ -69,17 +75,18 @@ export class BannerMaker extends Component<IProps, {}> {
   renderCanvas = () => {
     const canvas = this.canvasRef.current;
     const ctx = canvas.getContext("2d");
-    canvas.width = +this.props.width;
-    canvas.height = +this.props.height;
-
-    if (Object.keys(this.props.imgTarget).length === 0) {
+    canvas.width = +this.props.width * 2;
+    canvas.height = +this.props.height * 2;
+    canvas.style.width = `${this.props.width}px`;
+    canvas.style.height = `${this.props.height}px`;
+    if (this.props.imgTarget.files.length === 0 || !this.props.imgTarget) {
       const { r, g, b, a } = this.props.bgColor;
       ctx.fillStyle = `rgba(${[r, g, b, a]})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+      this.renderText();
     } else {
       this.randerBgImg(this.props.imgTarget);
     }
-    this.renderText();
   };
 
   // test 업데이트
@@ -92,7 +99,7 @@ export class BannerMaker extends Component<IProps, {}> {
     const canvas = this.canvasRef.current;
     const ctx = canvas.getContext("2d");
     const { r, g, b, a } = this.props.fontColor;
-    ctx.font = "30px Georgia";
+    ctx.font = "80px Black Han Sans";
     ctx.fillStyle = `rgba(${[r, g, b, a]})`;
     ctx.textAlign = "left"; // 가로 가운데 정렬
     ctx.textBaseline = "top";
@@ -136,6 +143,7 @@ export class BannerMaker extends Component<IProps, {}> {
         img.src = reader.result.toString();
       }
     };
+    this.props.updateimgTarget(target);
     reader.readAsDataURL(target.files[0]);
   };
 
@@ -168,28 +176,37 @@ export class BannerMaker extends Component<IProps, {}> {
   // 위치값 업데이트
   getPosition = e => {
     const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = (e.clientX - rect.left) * 2;
+    const y = (e.clientY - rect.top) * 2;
     this.props.updatePostion(x, y);
   };
 
   render() {
     return (
       <React.Fragment>
-        <div className="header">
+        {/* <div className="header">
           <h1>Banner Maker</h1>
-        </div>
+        </div> */}
         <div className="mainWrap">
           <Preview canvasRef={this.canvasRef} getPosition={this.getPosition} />
-          <SizeControler width={this.props.width} height={this.props.height} changeSize={this.changeSize} />
-          <BgImgControler setBgImg={this.setBgImg} />
-          <BgColorControler
-            bgColor={this.props.bgColor}
-            fontColor={this.props.fontColor}
-            changeBgColor={this.changeBgColor}
-            changeFontColor={this.changeFontColor}
-          />
-          <TextControler text={this.props.text} setText={this.setText} />
+          <div>
+            <BgColorControler
+              bgColor={this.props.bgColor}
+              fontColor={this.props.fontColor}
+              width={this.props.width}
+              height={this.props.height}
+              changeSize={this.changeSize}
+              setBgImg={this.setBgImg}
+              changeBgColor={this.changeBgColor}
+              changeFontColor={this.changeFontColor}
+            />
+            <FontColorControler
+              text={this.props.text}
+              fontColor={this.props.fontColor}
+              setText={this.setText}
+              changeFontColor={this.changeFontColor}
+            />
+          </div>
           <DownloadBtn onDownLoad={this.onDownLoad} />
         </div>
       </React.Fragment>

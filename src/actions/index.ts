@@ -15,6 +15,9 @@ export const updateBgColor = createAction("@style/bgColor/update", resolve => (b
   return resolve({ bgColor });
 });
 
+export const updateimgTarget = createAction("@style/imgTarget/update", resolve => (imgTarget: object) => {
+  return resolve({ imgTarget });
+});
 // text위치값 업데이트
 export const updatePostion = createAction("@style/postion/update", resolve => (positionX: number, positionY: number) => {
   return resolve({ positionX, positionY });

@@ -11,11 +11,11 @@ export const SizeControler: React.FC<SizeControlProps> = props => {
   return (
     <div className="sizeControler">
       <div className="inputWrap">
-        <label>width</label>
+        <label>Width</label>
         <input type="number" name="width" onChange={props.changeSize} defaultValue={props.width} />
       </div>
       <div className="inputWrap">
-        <label>height</label>
+        <label>Height</label>
         <input type="number" name="height" onChange={props.changeSize} defaultValue={props.height} />
       </div>
     </div>
