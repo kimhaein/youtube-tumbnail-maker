@@ -4,8 +4,12 @@ import { HuePicker, AlphaPicker } from "react-color";
 interface FontColorControlerProps {
   text: string;
   fontColor: object;
+  fontSize: string;
+  fontFamily: string;
   setText(event: React.ChangeEvent<HTMLInputElement>): void;
   changeFontColor({ rgb }: { rgb: object }): void;
+  changeFontSize(event: React.ChangeEvent<HTMLInputElement>): void;
+  changeFontFamily(event: React.ChangeEvent<HTMLSelectElement>): void;
 }
 
 export const FontColorControler: React.FC<FontColorControlerProps> = props => {
@@ -18,14 +22,14 @@ export const FontColorControler: React.FC<FontColorControlerProps> = props => {
         <div className="row">
           <div className="inputWrap">
             <label>Font-Size</label>
-            <input type="text" name="fontSize" />
+            <input type="number" name="fontSize" onChange={props.changeFontSize} defaultValue={props.fontSize} />
           </div>
           <div className="inputWrap">
             <label>Font</label>
-            <select>
-              <option>Noto Sans KR</option>
-              <option>Black Han Sans</option>
-              <option>1</option>
+            <select value={props.fontFamily} onChange={props.changeFontFamily}>
+              <option value="Noto Sans KR">Noto Sans KR</option>
+              <option value="Black Han Sans">Black Han Sans</option>
+              <option value="Nanum Gothic">Nanum Gothic</option>
             </select>
           </div>
         </div>

@@ -9,6 +9,8 @@ export interface IStoreState {
   };
   bgColor: { r: number; g: number; b: number; a: number };
   fontColor: { r: number; g: number; b: number; a: number };
+  fontSize: string;
+  fontFamily: string;
   textList: string[];
   text: string;
   fontBgColor: { r: number; g: number; b: number; a: number };

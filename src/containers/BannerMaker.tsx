@@ -2,7 +2,17 @@ import React, { Component } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { IStoreState } from "../store";
-import { updateWidth, updatePostion, updateBgColor, updateimgTarget, updateHeight, updateText, updateFontColor } from "../actions";
+import {
+  updateWidth,
+  updatePostion,
+  updateBgColor,
+  updateimgTarget,
+  updateHeight,
+  updateText,
+  updateFontColor,
+  updateFontSize,
+  updateFontFamily
+} from "../actions";
 
 import { Preview, SizeControler, BgColorControler, FontColorControler, DownloadBtn } from "../componets";
 
@@ -14,6 +24,8 @@ interface IProps {
   };
   bgColor: { r: number; g: number; b: number; a: number };
   fontColor: { r: number; g: number; b: number; a: number };
+  fontSize: string;
+  fontFamily: string;
   textList: string[];
   text: string;
   fontBgColor: { r: number; g: number; b: number; a: number };
@@ -27,6 +39,8 @@ interface IProps {
   updatePostion?(positionX: number, positionY: number): void;
   updateText?(text: string): void;
   updateFontColor?(fontColor: object): void;
+  updateFontSize?(fontSize: number): void;
+  updateFontFamily?(fontFamily: string): void;
 }
 
 const mapStateToProps = (state: IStoreState) => {
@@ -37,6 +51,8 @@ const mapStateToProps = (state: IStoreState) => {
     imgTarget: state.imgTarget,
     bgColor: state.bgColor,
     fontColor: state.fontColor,
+    fontSize: state.fontSize,
+    fontFamily: state.fontFamily,
     textList: state.textList,
     text: state.text,
     fontBgColor: state.fontBgColor,
@@ -54,7 +70,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   updateimgTarget: imgTarget => dispatch(updateimgTarget(imgTarget)),
   updatePostion: (positionX, positionY) => dispatch(updatePostion(positionX, positionY)),
   updateText: text => dispatch(updateText(text)),
-  updateFontColor: fontColor => dispatch(updateFontColor(fontColor))
+  updateFontColor: fontColor => dispatch(updateFontColor(fontColor)),
+  updateFontSize: fontSize => dispatch(updateFontSize(fontSize)),
+  updateFontFamily: fontFamily => dispatch(updateFontFamily(fontFamily))
 });
 export class BannerMaker extends Component<IProps, {}> {
   private canvasRef: React.RefObject<HTMLCanvasElement> = React.createRef();
@@ -99,11 +117,19 @@ export class BannerMaker extends Component<IProps, {}> {
     const canvas = this.canvasRef.current;
     const ctx = canvas.getContext("2d");
     const { r, g, b, a } = this.props.fontColor;
-    ctx.font = "80px Black Han Sans";
+    ctx.font = `${+this.props.fontSize * 2}px ${this.props.fontFamily}`;
     ctx.fillStyle = `rgba(${[r, g, b, a]})`;
     ctx.textAlign = "left"; // 가로 가운데 정렬
     ctx.textBaseline = "top";
     ctx.fillText(this.props.text, this.props.positionX, this.props.positionY);
+  };
+
+  changeFontSize = event => {
+    this.props.updateFontSize(event.target.value);
+  };
+
+  changeFontFamily = event => {
+    this.props.updateFontFamily(event.target.value);
   };
 
   // 배경색 업데이트
@@ -130,9 +156,7 @@ export class BannerMaker extends Component<IProps, {}> {
     reader.onload = () => {
       const ctx = canvas.getContext("2d");
       img.onload = () => {
-        canvas.width = +this.props.width;
-        canvas.height = +this.props.height;
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, +this.props.width * 2, +this.props.height * 2);
         // 글씨 랜더
         this.renderText();
       };
@@ -203,8 +227,12 @@ export class BannerMaker extends Component<IProps, {}> {
             <FontColorControler
               text={this.props.text}
               fontColor={this.props.fontColor}
+              fontSize={this.props.fontSize}
+              fontFamily={this.props.fontFamily}
               setText={this.setText}
               changeFontColor={this.changeFontColor}
+              changeFontSize={this.changeFontSize}
+              changeFontFamily={this.changeFontFamily}
             />
           </div>
           <DownloadBtn onDownLoad={this.onDownLoad} />

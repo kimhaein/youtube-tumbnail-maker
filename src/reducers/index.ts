@@ -11,6 +11,8 @@ export const initializeState: IStoreState = {
   },
   bgColor: { r: 204, g: 0, b: 0, a: 1 },
   fontColor: { r: 255, g: 255, b: 255, a: 1 },
+  fontSize: "30",
+  fontFamily: "Noto Sans KR",
   textList: [],
   text: "Sample Text",
   fontBgColor: { r: 0, g: 0, b: 0, a: 0 },
@@ -56,6 +58,16 @@ export default (state: IStoreState = initializeState, action: ActionType<typeof 
       return {
         ...state,
         fontColor: action.payload.fontColor
+      };
+    case getType(Actions.updateFontSize):
+      return {
+        ...state,
+        fontSize: action.payload.fontSize
+      };
+    case getType(Actions.updateFontFamily):
+      return {
+        ...state,
+        fontFamily: action.payload.fontFamily
       };
     default:
       return Object.assign({}, state);
