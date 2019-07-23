@@ -12,7 +12,7 @@ export const initializeState: IStoreState = {
   bgColor: { r: 204, g: 0, b: 0, a: 1 },
   fontColor: { r: 255, g: 255, b: 255, a: 1 },
   fontSize: "30",
-  fontFamily: "Noto Sans KR",
+  fontFamily: "Nanum Gothic",
   textList: [],
   text: "Sample Text",
   fontBgColor: { r: 0, g: 0, b: 0, a: 0 },

@@ -27,9 +27,13 @@ export const FontColorControler: React.FC<FontColorControlerProps> = props => {
           <div className="inputWrap">
             <label>Font</label>
             <select value={props.fontFamily} onChange={props.changeFontFamily}>
-              <option value="Noto Sans KR">Noto Sans KR</option>
-              <option value="Black Han Sans">Black Han Sans</option>
-              <option value="Nanum Gothic">Nanum Gothic</option>
+              <option value="Nanum Gothic">Nanum Gothic(K)</option>
+              <option value="Black Han Sans">Black Han Sans(K)</option>
+              <option value="Song Myung">Song Myung(K)</option>
+              <option value="Do Hyeon">Do Hyeon(K)</option>
+              <option value="Jua">Jua(K)</option>
+              <option value="Work Sans">Work Sans(E)</option>
+              <option value="Merienda">Merienda(E)</option>
             </select>
           </div>
         </div>

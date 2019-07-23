@@ -14,7 +14,7 @@ import {
   updateFontFamily
 } from "../actions";
 
-import { Preview, SizeControler, BgColorControler, FontColorControler, DownloadBtn } from "../componets";
+import { Preview, BgColorControler, FontColorControler, DownloadBtn } from "../componets";
 
 interface IProps {
   width: string;
@@ -119,8 +119,6 @@ export class BannerMaker extends Component<IProps, {}> {
     const { r, g, b, a } = this.props.fontColor;
     ctx.font = `${+this.props.fontSize * 2}px ${this.props.fontFamily}`;
     ctx.fillStyle = `rgba(${[r, g, b, a]})`;
-    ctx.textAlign = "left"; // 가로 가운데 정렬
-    ctx.textBaseline = "top";
     ctx.fillText(this.props.text, this.props.positionX, this.props.positionY);
   };
 
@@ -208,12 +206,9 @@ export class BannerMaker extends Component<IProps, {}> {
   render() {
     return (
       <React.Fragment>
-        {/* <div className="header">
-          <h1>Banner Maker</h1>
-        </div> */}
         <div className="mainWrap">
           <Preview canvasRef={this.canvasRef} getPosition={this.getPosition} />
-          <div>
+          <div className="row">
             <BgColorControler
               bgColor={this.props.bgColor}
               fontColor={this.props.fontColor}
