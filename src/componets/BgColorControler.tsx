@@ -32,7 +32,7 @@ export const BgColorControler: React.FC<BgColorControlerProps> = props => {
         </div>
         <div className="inputWrap">
           <label>Image</label>
-          <input type="file" onChange={props.setBgImg} />
+          <input className="w100" type="file" onChange={props.setBgImg} />
         </div>
         <div className="colorControler">
           <HuePicker width={"97%"} color={props.bgColor} onChangeComplete={props.changeBgColor} />

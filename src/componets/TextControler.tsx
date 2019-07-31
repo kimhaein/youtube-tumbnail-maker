@@ -10,7 +10,7 @@ export const TextControler: React.FC<TextControlerProps> = props => {
     <div className="textContents">
       <div className="inputWrap">
         <label>글씨 등록</label>
-        <input type="text" name="text" onChange={props.setText} defaultValue={props.text} />
+        <input className="w100" type="text" name="text" onChange={props.setText} defaultValue={props.text} />
       </div>
     </div>
   );

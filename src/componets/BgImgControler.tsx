@@ -9,7 +9,7 @@ export const BgImgControler: React.FC<BgImgControlerProps> = props => {
     <div className="bgImg">
       <div className="inputWrap">
         <label>배경이미지</label>
-        <input type="file" onChange={props.setBgImg} />
+        <input className="w100" type="file" onChange={props.setBgImg} />
       </div>
     </div>
   );

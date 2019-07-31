@@ -147,10 +147,10 @@ export class BannerMaker extends Component<IProps, {}> {
 
   // 배경 이미지 적용
   randerBgImg = target => {
+    if (!target.files) return false;
     const reader = new FileReader();
     const img = new Image();
     const canvas = this.canvasRef.current;
-    if (!reader) return false;
     reader.onload = () => {
       const ctx = canvas.getContext("2d");
       img.onload = () => {
@@ -185,14 +185,14 @@ export class BannerMaker extends Component<IProps, {}> {
     }
   };
 
-  // 스티커 설정
-  setSticker = ({ target }) => {};
-
   // 이미지 다운로드
   onDownLoad = ({ target }) => {
     const href = this.canvasRef.current.toDataURL();
-    target.href = href;
-    target.download = "banner_img.png";
+    console.log(this.props.width);
+    const link = document.createElement("a");
+    link.download = "banner_img.png";
+    link.href = href;
+    link.click();
   };
 
   // 위치값 업데이트
