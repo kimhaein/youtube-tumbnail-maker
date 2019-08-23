@@ -6,6 +6,7 @@ body {
   font-family: "Noto Sans KR", sans-serif;
   background: $mainColor;
   font-size: 12px;
+  
 }
 
 h2 {
@@ -57,6 +58,7 @@ h2 {
   color: #ffffff;
   .mainWrap {
     @include center;
+    height: 100vh;
     flex-direction: column;
     > * {
       padding: 20px;

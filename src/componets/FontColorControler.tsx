@@ -1,15 +1,17 @@
 import * as React from "react";
-import { HuePicker, AlphaPicker } from "react-color";
+import { HuePicker, TwitterPicker } from "react-color";
 
 interface FontColorControlerProps {
   text: string;
   fontColor: object;
   fontSize: string;
   fontFamily: string;
+  colorPicker: string[];
   setText(event: React.ChangeEvent<HTMLInputElement>): void;
   changeFontColor({ rgb }: { rgb: object }): void;
   changeFontSize(event: React.ChangeEvent<HTMLInputElement>): void;
   changeFontFamily(event: React.ChangeEvent<HTMLSelectElement>): void;
+  resetStyle(event: React.MouseEvent<HTMLButtonElement>):void;
 }
 
 export const FontColorControler: React.FC<FontColorControlerProps> = props => {
@@ -17,12 +19,12 @@ export const FontColorControler: React.FC<FontColorControlerProps> = props => {
     <div className="bgControler">
       <div className="bgColorWrap">
         <h2>
-          FONT ㅣ <button>reset</button>
+          FONT ㅣ <button className="font" onClick={props.resetStyle}>reset</button>
         </h2>
         <div className="row">
           <div className="inputWrap">
             <label>Font-Size</label>
-            <input type="number" name="fontSize" onChange={props.changeFontSize} defaultValue={props.fontSize} />
+            <input type="number" name="fontSize" onChange={props.changeFontSize} value={props.fontSize} />
           </div>
           <div className="inputWrap">
             <label>Font</label>
@@ -39,11 +41,11 @@ export const FontColorControler: React.FC<FontColorControlerProps> = props => {
         </div>
         <div className="inputWrap">
           <label>Text</label>
-          <input type="text" name="text" onChange={props.setText} defaultValue={props.text} />
+          <input type="text" name="text" onChange={props.setText} value={props.text} />
         </div>
         <div className="colorControler">
+          <TwitterPicker width={"100%"} color={props.fontColor} triangle={"hide"}  colors={props.colorPicker} onChangeComplete={props.changeFontColor} />
           <HuePicker width={"97%"} color={props.fontColor} onChangeComplete={props.changeFontColor} />
-          <AlphaPicker width={"97%"} color={props.fontColor} onChangeComplete={props.changeFontColor} />
         </div>
       </div>
     </div>

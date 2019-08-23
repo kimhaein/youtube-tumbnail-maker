@@ -17,4 +17,5 @@ export interface IStoreState {
   positionX: number;
   positionY: number;
   href: string;
+  colorPicker: string[];
 }

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { IStoreState } from "../store";
+import { initializeState as init} from "../reducers"
 import {
   updateWidth,
   updatePostion,
@@ -32,6 +33,7 @@ interface IProps {
   positionX: number;
   positionY: number;
   href: string;
+  colorPicker: string[];
   updateWidth?(width: string): void;
   updateHeight?(height: string): void;
   updateBgColor?(bgColor: object): void;
@@ -58,7 +60,8 @@ const mapStateToProps = (state: IStoreState) => {
     fontBgColor: state.fontBgColor,
     positionX: state.positionX,
     positionY: state.positionY,
-    href: state.href
+    href: state.href,
+    colorPicker: state.colorPicker
   };
 };
 
@@ -188,7 +191,6 @@ export class BannerMaker extends Component<IProps, {}> {
   // 이미지 다운로드
   onDownLoad = ({ target }) => {
     const href = this.canvasRef.current.toDataURL();
-    console.log(this.props.width);
     const link = document.createElement("a");
     link.download = "banner_img.png";
     link.href = href;
@@ -203,6 +205,26 @@ export class BannerMaker extends Component<IProps, {}> {
     this.props.updatePostion(x, y);
   };
 
+  // 리셋
+  resetStyle = (e) => {
+    switch (e.target.className) {
+      case "bg":{
+        this.props.updateWidth(init.width)
+        this.props.updateHeight(init.height)
+        this.props.updateBgColor(init.bgColor)
+        this.props.updateimgTarget(init.imgTarget)
+        break;
+      } 
+      case "font":{
+        this.props.updateText(init.text)
+        this.props.updateFontColor(init.fontColor)
+        this.props.updateFontSize(+init.fontSize)
+        this.props.updateFontFamily(init.fontFamily)
+        break;
+      } 
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -214,20 +236,24 @@ export class BannerMaker extends Component<IProps, {}> {
               fontColor={this.props.fontColor}
               width={this.props.width}
               height={this.props.height}
+              colorPicker={this.props.colorPicker}
               changeSize={this.changeSize}
               setBgImg={this.setBgImg}
               changeBgColor={this.changeBgColor}
               changeFontColor={this.changeFontColor}
+              resetStyle={this.resetStyle}
             />
             <FontColorControler
               text={this.props.text}
               fontColor={this.props.fontColor}
               fontSize={this.props.fontSize}
               fontFamily={this.props.fontFamily}
+              colorPicker={this.props.colorPicker}
               setText={this.setText}
               changeFontColor={this.changeFontColor}
               changeFontSize={this.changeFontSize}
               changeFontFamily={this.changeFontFamily}
+              resetStyle={this.resetStyle}
             />
           </div>
           <DownloadBtn onDownLoad={this.onDownLoad} />

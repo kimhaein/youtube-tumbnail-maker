@@ -18,7 +18,8 @@ export const initializeState: IStoreState = {
   fontBgColor: { r: 0, g: 0, b: 0, a: 0 },
   positionX: 350,
   positionY: 175,
-  href: ""
+  href: "",
+  colorPicker: ['#FF6900', '#FCB900', '#00D084', '#0693E3', '#EB144C', '#F78DA7', '#9900EF', '#FFFFFF']
 };
 
 export default (state: IStoreState = initializeState, action: ActionType<typeof Actions>) => {
