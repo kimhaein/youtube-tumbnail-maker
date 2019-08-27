@@ -41,7 +41,7 @@ export const FontColorControler: React.FC<FontColorControlerProps> = props => {
         </div>
         <div className="inputWrap">
           <label>Text</label>
-          <input type="text" name="text" onChange={props.setText} value={props.text} />
+          <input className="w100" type="text" name="text" onChange={props.setText} value={props.text} />
         </div>
         <div className="colorControler">
           <TwitterPicker width={"100%"} color={props.fontColor} triangle={"hide"}  colors={props.colorPicker} onChangeComplete={props.changeFontColor} />

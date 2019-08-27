@@ -58,7 +58,8 @@ h2 {
   color: #ffffff;
   .mainWrap {
     @include center;
-    height: 100vh;
+    padding:30px 0;
+    height: calc(100vh + 60px);
     flex-direction: column;
     > * {
       padding: 20px;
@@ -95,6 +96,7 @@ h2 {
     .inputWrap {
       input {
         min-width: 400px;
+        max-width:100%;
       }
     }
   }
